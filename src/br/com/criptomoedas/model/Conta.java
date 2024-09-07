@@ -1,6 +1,6 @@
 package br.com.criptomoedas.model;
 
-public class Conta {
+public abstract class Conta {
     //atributos
     private int idConta;
     private int idUsuario;

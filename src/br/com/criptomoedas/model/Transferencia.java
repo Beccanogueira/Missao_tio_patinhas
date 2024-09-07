@@ -8,9 +8,9 @@ public class Transferencia extends Conta {
     private LocalDateTime dataHora;
     private double valorTransferido;
 
-    public Transferencia(int idCarteira, int idUsuario, double saldoTotal, int numeroConta, int transferencia, int idContaDestino, LocalDateTime dataHora, double valorTransferido) {
+    public Transferencia(int idCarteira, int idUsuario, double saldoTotal, int numeroConta, int idTransferencia, int idContaDestino, LocalDateTime dataHora, double valorTransferido) {
         super(idCarteira, idUsuario, saldoTotal, numeroConta);
-        this.idTransferencia = transferencia;
+        this.idTransferencia = idTransferencia;
         this.idContaDestino = idContaDestino;
         this.dataHora = dataHora;
         this.valorTransferido = valorTransferido;
