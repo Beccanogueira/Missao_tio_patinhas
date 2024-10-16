@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ContaDao {
+public class ContaDao {
     protected Connection conexao;
 
     public ContaDao() throws SQLException {

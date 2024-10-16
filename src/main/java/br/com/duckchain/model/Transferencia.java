@@ -2,45 +2,38 @@ package br.com.duckchain.model;
 
 import java.time.LocalDateTime;
 
-public class Transferencia extends Conta {
-    private int idTransferencia;
+public class Transferencia {
+
+    private int id;
+    private int idContaOrigem;
     private int idContaDestino;
-    private LocalDateTime dataHora;
-    private double valorTransferido;
+    private double valor;
+    private int idUsuario;
+    private LocalDateTime dataTransferencia;
 
-    public Transferencia(int idCarteira, int idUsuario, double saldoTotal, int numeroConta, int idTransferencia, int idContaDestino, LocalDateTime dataHora, double valorTransferido) {
-        super(idCarteira, idUsuario, saldoTotal, numeroConta);
-        this.idTransferencia = idTransferencia;
+    public Transferencia(int id, int idContaOrigem, int idContaDestino, double valor, int idUsuario, LocalDateTime dataTransferencia) {
+        this.id = id;
+        this.idContaOrigem = idContaOrigem;
         this.idContaDestino = idContaDestino;
-        this.dataHora = dataHora;
-        this.valorTransferido = valorTransferido;
+        this.valor = valor;
+        this.idUsuario = idUsuario;
+        this.dataTransferencia = dataTransferencia;
     }
 
-    //metodo
-
-    public void transferir(Conta contaDestino, double valorDeposito) {
-        if(super.getSaldoTotal() < 0 || super.getSaldoTotal() < valorDeposito){
-            throw new IllegalArgumentException("Você não possui saldo suficiente para essa transação");
-        }
-        double saldoAtual = super.getSaldoTotal() - valorDeposito;
-        super.setSaldoTotal(saldoAtual);
-
-        double novoSaldo = contaDestino.getSaldoTotal() + valorDeposito;
-        contaDestino.setSaldoTotal(novoSaldo);
-
+    public int getId() {
+        return id;
     }
 
-
-
-    //getter and setter
-
-
-    public int getIdTransferencia() {
-        return idTransferencia;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setIdTransferencia(int idTransferencia) {
-        this.idTransferencia = idTransferencia;
+    public int getIdContaOrigem() {
+        return idContaOrigem;
+    }
+
+    public void setIdContaOrigem(int idContaOrigem) {
+        this.idContaOrigem = idContaOrigem;
     }
 
     public int getIdContaDestino() {
@@ -51,19 +44,27 @@ public class Transferencia extends Conta {
         this.idContaDestino = idContaDestino;
     }
 
-    public LocalDateTime getDataHora() {
-        return dataHora;
+    public double getValor() {
+        return valor;
     }
 
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 
-    public double getValorTransferido() {
-        return valorTransferido;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setValorTransferido(double valorTransferido) {
-        this.valorTransferido = valorTransferido;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public LocalDateTime getDataTransferencia() {
+        return dataTransferencia;
+    }
+
+    public void setDataTransferencia(LocalDateTime dataTransferencia) {
+        this.dataTransferencia = dataTransferencia;
     }
 }

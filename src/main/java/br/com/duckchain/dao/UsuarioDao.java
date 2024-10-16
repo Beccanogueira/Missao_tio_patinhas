@@ -8,11 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDao {
     private Connection conexao;
+
     public UsuarioDao() throws SQLException {
         conexao = ConnectionFactory.getConnection();
     }
@@ -29,8 +31,6 @@ public class UsuarioDao {
     }
     public void fecharConexao() throws SQLException {
         conexao.close();
-
-
     }
 
     public Usuario pesquisar(int idUsuario) throws SQLException, EntidadeNaoEncontradaException {
@@ -69,7 +69,7 @@ public class UsuarioDao {
         stm.setString(2, usuario.getEmail());
         stm.setString(3, usuario.getNome());
         stm.setString(4, usuario.getSenha());
-        stm.setInt(5, usuario.getIdUsuario());
+        stm.setInt(5, usuario.getId());
         stm.executeUpdate();
     }
 

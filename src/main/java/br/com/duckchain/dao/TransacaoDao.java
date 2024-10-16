@@ -1,22 +1,26 @@
 package br.com.duckchain.dao;
 
+import br.com.duckchain.factory.ConnectionFactory;
 import br.com.duckchain.model.Conta;
 import br.com.duckchain.model.Transacao;
 import br.com.duckchain.model.Transferencia;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class TransacaoDao extends ContaDao {
+public class TransacaoDao {
+
+    private Connection conexao;
 
     public TransacaoDao() throws SQLException {
-        super();
+        conexao = ConnectionFactory.getConnection();
     }
 
     public void cadastrar(Transacao transacao) throws SQLException {
-        PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_transacao (id_transacao, id_conta, dt_transacao, ds_tipotransacao, vl_valor, ds_descricao, data_hora, tipo_transacao, quantidade_moeda, preco_moeda) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_transacao (id_transacao, id_conta, dt_transacao, ds_tipotransacao, vl_valor, ds_descricao, id_usuario, id_moeda) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         stm.setInt(1, transacao.getIdConta());
         stm.setInt(2, transacao.getIdUsuario());
         stm.setDouble(3, transacao.getSaldoTotal());
@@ -30,8 +34,7 @@ public class TransacaoDao extends ContaDao {
         stm.executeUpdate();
     }
 
-    @Override
-    protected Transacao parseConta(ResultSet result) throws SQLException {
+    protected Transacao parseTransacao(ResultSet result) throws SQLException {
         int idConta = result.getInt("id_conta");
         int idUsuario = result.getInt("id_usuario");
         double saldoTotal = result.getDouble("saldo_total");

@@ -1,32 +1,29 @@
 package br.com.duckchain.model;
 
+import java.time.LocalDateTime;
+
 public class Usuario {
-    //atributos
-    private int idUsuario;
+    private int id;
     private String nome;
     private String email;
     private String senha;
     private String cpf;
+    private LocalDateTime dataCriacao;
 
-    //Construtor
-
-
-    public Usuario(int idUsuario, String nome, String email, String senha, String cpf) {
-        this.idUsuario = idUsuario;
+    public Usuario(int id, String nome, String email, String senha, String cpf) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
     }
 
-    //Getter and setter
-
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getId() {
+        return id;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -59,5 +56,13 @@ public class Usuario {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }
