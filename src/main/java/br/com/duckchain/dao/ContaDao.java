@@ -30,10 +30,6 @@ public class ContaDao {
 
     protected abstract Conta parseConta(ResultSet result) throws SQLException;
 
-    public void fecharConexao() throws SQLException {
-        conexao.close();
-    }
-
     public List<Conta> listar() throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta");
         ResultSet result = stm.executeQuery();
@@ -60,5 +56,9 @@ public class ContaDao {
         if (linhasAfetadas == 0) {
             throw new EntidadeNaoEncontradaException("Conta não encontrada para ser removida");
         }
+    }
+
+    public void fecharConexao() throws SQLException {
+        conexao.close();
     }
 }

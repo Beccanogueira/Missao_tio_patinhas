@@ -48,4 +48,8 @@ public class TransacaoDao {
 
         return new Transacao(idConta, idUsuario, saldoTotal, numeroConta, idTransacao, idMoeda, dataHora, tipoTransacao, quantidadeMoeda, precoMoeda);
     }
+
+    public void fecharConexao() throws SQLException {
+        conexao.close();
+    }
 }

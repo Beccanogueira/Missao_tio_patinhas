@@ -39,4 +39,8 @@ public class TransferenciaDao {
 
         return new Transferencia(idTransferencia, idContaOrigem, idContaDestino, saldoTotal, idUsuario, dataTransferencia);
     }
+
+    public void fecharConexao() throws SQLException {
+        conexao.close();
+    }
 }

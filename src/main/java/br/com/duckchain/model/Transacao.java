@@ -24,6 +24,9 @@ public class Transacao {
         this.idMoeda = idMoeda;
     }
 
+    public Transacao(int idConta, int idUsuario, double saldoTotal, int numeroConta, int idTransacao, int idMoeda, LocalDateTime dataHora, String tipoTransacao, int quantidadeMoeda, double precoMoeda) {
+    }
+
     public int getId() {
         return id;
     }
@@ -86,5 +89,20 @@ public class Transacao {
 
     public void setIdMoeda(int idMoeda) {
         this.idMoeda = idMoeda;
+    }
+
+    public double getSaldoTotal() {
+    }
+
+    public int getNumeroConta() {
+    }
+
+    public int getIdTransacao() {
+    }
+
+    public double getQuantidadeMoeda() {
+    }
+
+    public double getPrecoMoeda() {
     }
 }
