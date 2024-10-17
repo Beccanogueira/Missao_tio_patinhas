@@ -20,14 +20,13 @@ public class UsuarioDao {
     }
 
     public void cadastrar(Usuario usuario) throws SQLException {
-        PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_usuario (id_usuario, cd_cpf, dr_email, nm_nome, pw_senha) VALUES (seq_produto.nextval, ?,?,?,?)");
-        stm.setString(1, usuario.getCpf());
-        stm.setString(2, usuario.getEmail());
-        stm.setString(3, usuario.getNome());
-        stm.setString(4, usuario.getSenha());
+        PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_usuario (id_usuario, cd_cpf, dr_email, nm_nome, pw_senha) VALUES (?,?,?,?,?)");
+        stm.setInt(1, usuario.getId());
+        stm.setString(2, usuario.getCpf());
+        stm.setString(3, usuario.getEmail());
+        stm.setString(4, usuario.getNome());
+        stm.setString(5, usuario.getSenha());
         stm.executeUpdate();
-
-
     }
     public void fecharConexao() throws SQLException {
         conexao.close();
@@ -49,9 +48,8 @@ public class UsuarioDao {
         String email = result.getString("dr_email");
         String nome = result.getString("nm_nome");
         String senha = result.getString("pw_senha");
-        return new Usuario(id, cpf, email, nome, senha);
+        return new Usuario(id, nome, email, senha, cpf);
     }
-
 
     public List<Usuario> listar() throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_usuario");

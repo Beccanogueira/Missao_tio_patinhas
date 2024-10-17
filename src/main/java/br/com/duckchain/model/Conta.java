@@ -5,12 +5,12 @@ public class Conta {
     private int idConta;
     private int idUsuario;
     private double saldoTotal;
-    private int numeroConta;
+    private String numeroConta;
 
     //Construtor
 
 
-    public Conta(int idConta, int idUsuario, double saldoTotal, int numeroConta) {
+    public Conta(int idConta, int idUsuario, double saldoTotal, String numeroConta) {
         this.idConta = idConta;
         this.idUsuario = idUsuario;
         this.saldoTotal = saldoTotal;
@@ -68,11 +68,11 @@ public class Conta {
         this.saldoTotal = saldoTotal;
     }
 
-    public int getNumeroConta() {
+    public String getNumeroConta() {
         return numeroConta;
     }
 
-    public void setNumeroConta(int numeroConta) {
+    public void setNumeroConta(String numeroConta) {
         this.numeroConta = numeroConta;
     }
 }

@@ -13,7 +13,7 @@ public class MoedaView {
             dao = new MoedaDao();
             int escolha;
             do{
-                System.out.println("--------------------------------\nMOEDA - MENU:\n 1 - CADASTRAR MOEDA\n 2 - PESQUISAR MOEDA\n 3 - ATUALIZAR MOEDA\n 4 - DELETAR MOEDA\n 5 - EXIBIR TODAS AS MOEDAS CADASTRADAS\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
+                System.out.println("--------------------------------\nMOEDA - MENU:\n 1 - CADASTRAR MOEDA\n 2 - PESQUISAR MOEDA\n 3 - LISTAR MOEDAS\n 4 - DELETAR MOEDA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
                 escolha = scanner.nextInt();
                 switch (escolha){
                     case 0:
@@ -26,7 +26,7 @@ public class MoedaView {
                         pesquisar(scanner, dao);
                         break;
                     case 3:
-                        atualizar(scanner, dao);
+                        listar(scanner, dao);
                         break;
                     case 4:
                         remover(scanner, dao);
@@ -62,10 +62,54 @@ public class MoedaView {
         }
     }
     private static void pesquisar(Scanner scanner, MoedaDao dao) {
+        System.out.print("Digite o ID da moeda que deseja pesquisar: ");
+        int idMoeda = scanner.nextInt();
+        scanner.nextLine();
+
+        Moeda moeda = null;
+        try {
+            moeda = dao.pesquisar(idMoeda);
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar a moeda: " + e.getMessage());
+            return;
+        }
+
+        if (moeda == null) {
+            System.out.println("Moeda com ID " + idMoeda + " não encontrada.");
+        } else {
+            System.out.println("\nMoeda encontrada:");
+            System.out.println("ID: " + moeda.getIdMoeda());
+            System.out.println("Nome: " + moeda.getNome());
+            System.out.println("Cotação Atual: " + moeda.getCotacaoAtual());
+            System.out.println("Variação 24H: " + moeda.getVariacao24H());
+            System.out.println("Volume 24H: " + moeda.getVolume24H());
+        }
 
     }
-    private static void atualizar(Scanner scanner, MoedaDao dao) {
+
+    private static void listar(Scanner scanner, MoedaDao dao) {
+        List<Moeda> moedas = null;
+        try {
+            moedas = dao.listar();
+        } catch (Exception e) {
+            System.out.println("Erro ao listar as moedas: " + e.getMessage());
+            return;
+        }
+
+        if (moedas.isEmpty()) {
+            System.out.println("Nenhuma moeda encontrada.");
+        } else {
+            for (Moeda moeda : moedas) {
+                System.out.println("----------------------------");
+                System.out.println("ID: " + moeda.getIdMoeda());
+                System.out.println("Nome: " + moeda.getNome());
+                System.out.println("Cotação Atual: " + moeda.getCotacaoAtual());
+                System.out.println("Variação 24H: " + moeda.getVariacao24H());
+                System.out.println("Volume 24H: " + moeda.getVolume24H());
+            }
+        }
     }
+
     private static void remover(Scanner scanner, MoedaDao dao) {
         System.out.println("Digite o código da moeda que deseja remover:");
         int idMoeda = scanner.nextInt();

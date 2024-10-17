@@ -3,6 +3,7 @@ package br.com.duckchain.dao;
 import br.com.duckchain.exception.EntidadeNaoEncontradaException;
 import br.com.duckchain.model.Conta;
 import br.com.duckchain.factory.ConnectionFactory;
+import br.com.duckchain.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +18,19 @@ public class ContaDao {
     public ContaDao() throws SQLException {
         conexao = ConnectionFactory.getConnection();
     }
-    
+
+    public void cadastrar(Conta conta) throws SQLException {
+        String sql = "INSERT INTO t_conta (id_conta, id_usuario, vl_saldototal, cd_conta) VALUES (?, ?, ?, ?)";
+        PreparedStatement stm = conexao.prepareStatement(sql);
+
+        stm.setInt(1, conta.getIdConta());
+        stm.setInt(2, conta.getIdUsuario());
+        stm.setDouble(3, conta.getSaldoTotal());
+        stm.setString(4, conta.getNumeroConta());
+
+        stm.executeUpdate();
+    }
+
     public Conta pesquisar(int idConta) throws SQLException, EntidadeNaoEncontradaException {
         PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta WHERE id_conta = ?");
         stm.setInt(1, idConta);
@@ -27,8 +40,6 @@ public class ContaDao {
 
         return parseConta(result);
     }
-
-    protected abstract Conta parseConta(ResultSet result) throws SQLException;
 
     public List<Conta> listar() throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta");
@@ -41,10 +52,10 @@ public class ContaDao {
     }
 
     public void atualizar(Conta conta) throws SQLException {
-        PreparedStatement stm = conexao.prepareStatement("UPDATE t_conta SET id_usuario = ?, saldo_total = ?, numero_conta = ? WHERE id_conta = ?");
+        PreparedStatement stm = conexao.prepareStatement("UPDATE t_conta SET id_usuario = ?, vl_saldototal = ?, cd_conta = ? WHERE id_conta = ?");
         stm.setInt(1, conta.getIdUsuario());
         stm.setDouble(2, conta.getSaldoTotal());
-        stm.setInt(3, conta.getNumeroConta());
+        stm.setString(3, conta.getNumeroConta());
         stm.setInt(4, conta.getIdConta());
         stm.executeUpdate();
     }
@@ -60,5 +71,14 @@ public class ContaDao {
 
     public void fecharConexao() throws SQLException {
         conexao.close();
+    }
+
+    private Conta parseConta(ResultSet result) throws SQLException {
+        int id = result.getInt("id_conta");
+        String numeroConta = result.getString("cd_conta");
+        int idUsuario = result.getInt("id_usuario");
+        double saldototal = result.getDouble("vl_saldototal");
+
+        return new Conta(id, idUsuario, saldototal, numeroConta);
     }
 }

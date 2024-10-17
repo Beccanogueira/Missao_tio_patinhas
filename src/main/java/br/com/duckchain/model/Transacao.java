@@ -90,19 +90,4 @@ public class Transacao {
     public void setIdMoeda(int idMoeda) {
         this.idMoeda = idMoeda;
     }
-
-    public double getSaldoTotal() {
-    }
-
-    public int getNumeroConta() {
-    }
-
-    public int getIdTransacao() {
-    }
-
-    public double getQuantidadeMoeda() {
-    }
-
-    public double getPrecoMoeda() {
-    }
 }

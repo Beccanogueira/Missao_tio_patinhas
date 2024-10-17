@@ -36,10 +36,10 @@ public class MoedaDao {
 
     private Moeda parseMoeda(ResultSet result) throws SQLException {
         int idMoeda = result.getInt("id_moeda");
-        String nome = result.getString("nome");
-        double cotacaoAtual = result.getDouble("cotacao_atual");
-        double variacao24H = result.getDouble("variacao_24h");
-        double volume24H = result.getDouble("volume_24h");
+        String nome = result.getString("nm_nome");
+        double cotacaoAtual = result.getDouble("vl_cotacaoatual");
+        double variacao24H = result.getDouble("nr_variacao24h");
+        double volume24H = result.getDouble("nr_volume24h");
 
         return new Moeda(idMoeda, nome, cotacaoAtual, variacao24H, volume24H);
     }

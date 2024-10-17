@@ -1,9 +1,16 @@
 package br.com.duckchain.view;
 import br.com.duckchain.dao.TransferenciaDao;
+import br.com.duckchain.model.Transferencia;
+
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TransferenciaView {
+
+    private static int ultimoId = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -33,7 +40,40 @@ public class TransferenciaView {
         }
     }
     private static void cadastrar(Scanner scanner, TransferenciaDao dao) {
+        try {
+            System.out.print("ID da Conta de Origem: ");
+            int idContaOrigem = scanner.nextInt();
+
+            System.out.print("ID da Conta de Destino: ");
+            int idContaDestino = scanner.nextInt();
+
+            System.out.print("Valor da Transferência: ");
+            double valor = scanner.nextDouble();
+
+            System.out.print("ID do Usuário que está realizando a transferência: ");
+            int idUsuario = scanner.nextInt();
+
+            LocalDateTime dataTransferencia = LocalDateTime.now();
+
+            System.out.println("\n===== Dados da Transferência =====");
+            System.out.println("ID da Conta de Origem: " + idContaOrigem);
+            System.out.println("ID da Conta de Destino: " + idContaDestino);
+            System.out.println("Valor: " + valor);
+            System.out.println("ID do Usuário: " + idUsuario);
+            System.out.println("Data e Hora da Transferência: " + dataTransferencia.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+
+            int id = gerarId();
+            Transferencia transferencia = new Transferencia(id, idContaOrigem, idContaDestino, valor, idUsuario, dataTransferencia);
+
+            dao.cadastrar(transferencia);
+            System.out.println("\nTransferência cadastrada com sucesso!");
+
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar a transferência: " + e.getMessage());
+        }
     }
 
-
+    private static int gerarId() {
+        return ++ultimoId;
+    }
 }
