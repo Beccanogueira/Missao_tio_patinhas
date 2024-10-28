@@ -8,6 +8,11 @@ import java.util.*;
 public class MoedaView {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        executar(scanner);
+        scanner.close();
+    }
+
+    public static void executar(Scanner scanner) {
         MoedaDao dao;
         try{
             dao = new MoedaDao();
@@ -38,10 +43,9 @@ public class MoedaView {
             dao.fecharConexao();
         }catch (SQLException e){
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
-        }finally {
-            scanner.close();
         }
     }
+
     private static void cadastrar(Scanner scanner, MoedaDao dao){
         System.out.println("Digite o id da moeda:");
         int idMoeda = scanner.nextInt();

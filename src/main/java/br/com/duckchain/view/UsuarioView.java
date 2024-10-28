@@ -13,6 +13,11 @@ public class UsuarioView {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        executar(scanner);
+        scanner.close();
+    }
+
+    public static void executar(Scanner scanner) {
         UsuarioDao dao;
         try {
             dao = new UsuarioDao();
@@ -40,8 +45,6 @@ public class UsuarioView {
             dao.fecharConexao();
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
-        } finally {
-            scanner.close();
         }
     }
 

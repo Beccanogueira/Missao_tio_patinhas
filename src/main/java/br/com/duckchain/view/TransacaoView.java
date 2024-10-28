@@ -12,7 +12,12 @@ public class TransacaoView {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        executar(scanner);
+        scanner.close();
 
+    }
+
+    public  static void executar(Scanner scanner) {
         TransacaoDao dao;
         try{
             dao = new TransacaoDao();
@@ -34,10 +39,9 @@ public class TransacaoView {
             dao.fecharConexao();
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
-        } finally {
-            scanner.close();
         }
     }
+
     private static void cadastrar(Scanner scanner, TransacaoDao dao) {
         try {
             System.out.print("ID da Conta: ");
