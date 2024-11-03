@@ -21,7 +21,7 @@ public class UsuarioDao {
 
     public void cadastrar(Usuario usuario) throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_usuario (id_usuario, cd_cpf, dr_email, nm_nome, pw_senha) VALUES (?,?,?,?,?)");
-        stm.setInt(1, usuario.getId());
+        stm.setInt(1, gerarId());
         stm.setString(2, usuario.getCpf());
         stm.setString(3, usuario.getEmail());
         stm.setString(4, usuario.getNome());
@@ -71,13 +71,21 @@ public class UsuarioDao {
         stm.executeUpdate();
     }
 
-
-
     public void remover(int idUsuario) throws SQLException, EntidadeNaoEncontradaException {
         PreparedStatement stm = conexao.prepareStatement("DELETE from t_usuario where id_usuario = ?");
         stm.setLong(1, idUsuario);
         int linha = stm.executeUpdate();
         if (linha == 0)
             throw new EntidadeNaoEncontradaException("Usuario não encontrado para ser removido");
+    }
+
+    private int gerarId() throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT s_usuario_id.nextval as id_usuario FROM dual");
+        ResultSet result = stm.executeQuery();
+        int id = 0;
+        while (result.next()) {
+            id = result.getInt("id_usuario");
+        }
+        return id;
     }
 }
