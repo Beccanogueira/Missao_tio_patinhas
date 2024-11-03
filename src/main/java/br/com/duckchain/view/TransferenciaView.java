@@ -9,8 +9,6 @@ import java.util.*;
 
 public class TransferenciaView {
 
-    private static int ultimoId = 0;
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         executar(scanner);
@@ -66,8 +64,7 @@ public class TransferenciaView {
             System.out.println("ID do Usuário: " + idUsuario);
             System.out.println("Data e Hora da Transferência: " + dataTransferencia.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 
-            int id = gerarId();
-            Transferencia transferencia = new Transferencia(id, idContaOrigem, idContaDestino, valor, idUsuario, dataTransferencia);
+            Transferencia transferencia = new Transferencia(0, idContaOrigem, idContaDestino, valor, idUsuario, dataTransferencia);
 
             dao.cadastrar(transferencia);
             System.out.println("\nTransferência cadastrada com sucesso!");
@@ -75,9 +72,5 @@ public class TransferenciaView {
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar a transferência: " + e.getMessage());
         }
-    }
-
-    private static int gerarId() {
-        return ++ultimoId;
     }
 }
