@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TransacaoView {
-    private static int ultimoId = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -74,8 +73,7 @@ public class TransacaoView {
             System.out.println("ID da Moeda: " + idMoeda);
             System.out.println("Data e Hora: " + dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 
-            int id = gerarId();
-            Transacao transacao = new Transacao(id, idConta, dataHora, tipoTransacao, valor, descricao, idUsuario, idMoeda);
+            Transacao transacao = new Transacao(0, idConta, dataHora, tipoTransacao, valor, descricao, idUsuario, idMoeda);
 
             dao.cadastrar(transacao);
             System.out.println("\nTransação cadastrada com sucesso!");
@@ -83,10 +81,6 @@ public class TransacaoView {
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar a transação: " + e.getMessage());
         }
-    }
-
-    private static int gerarId() {
-        return ++ultimoId;
     }
 }
 

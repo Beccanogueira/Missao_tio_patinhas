@@ -21,7 +21,7 @@ public class TransacaoDao {
 
     public void cadastrar(Transacao transacao) throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_transacao (id_transacao, id_conta, dt_transacao, ds_tipotransacao, vl_valor, ds_descricao, id_usuario, id_moeda) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        stm.setInt(1, transacao.getId());
+        stm.setInt(1, gerarId());
         stm.setInt(2, transacao.getIdConta());
         stm.setTimestamp(3,  java.sql.Timestamp.valueOf(transacao.getDataHora()));
         stm.setString(4, transacao.getTipoTransacao());
@@ -34,5 +34,15 @@ public class TransacaoDao {
 
     public void fecharConexao() throws SQLException {
         conexao.close();
+    }
+
+    private int gerarId() throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT s_transacao_id.nextval as id_transacao FROM dual");
+        ResultSet result = stm.executeQuery();
+        int id = 0;
+        while (result.next()) {
+            id = result.getInt("id_transacao");
+        }
+        return id;
     }
 }
