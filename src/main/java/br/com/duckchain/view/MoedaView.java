@@ -47,8 +47,6 @@ public class MoedaView {
     }
 
     private static void cadastrar(Scanner scanner, MoedaDao dao){
-        System.out.println("Digite o id da moeda:");
-        int idMoeda = scanner.nextInt();
         System.out.println("Digite o nome da moeda/ativo:");
         String nome = scanner.next() + scanner.nextLine();
         System.out.println("Digite a cotação atual:");
@@ -57,7 +55,7 @@ public class MoedaView {
         double variacao24H = scanner.nextDouble();
         System.out.println("Digite a variação em volume das últimas 24 horas:");
         double volume24H = scanner.nextDouble();
-        Moeda novaMoeda = new Moeda(idMoeda, nome, cotacaoAtual, variacao24H, volume24H);
+        Moeda novaMoeda = new Moeda(0, nome, cotacaoAtual, variacao24H, volume24H);
         try{
             dao.cadastrar(novaMoeda);
             System.out.println("--------------------------------\nMoeda cadastrada com sucesso!");

@@ -17,7 +17,7 @@ public class MoedaDao {
     //Métodos CRUD
     public void cadastrar(Moeda moeda) throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_moeda (id_moeda, nm_nome, vl_cotacaoatual, nr_variacao24h, nr_volume24h) VALUES (?, ?, ?, ?, ?)");
-        stm.setInt(1, moeda.getIdMoeda());
+        stm.setInt(1, gerarId());
         stm.setString(2, moeda.getNome());
         stm.setDouble(3, moeda.getCotacaoAtual());
         stm.setDouble(4, moeda.getVariacao24H());
@@ -61,5 +61,15 @@ public class MoedaDao {
         if (linhasAfetadas == 0) {
             throw new EntidadeNaoEncontradaException("Moeda não encontrada");
         }
+    }
+
+    private int gerarId() throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT s_moeda_id.nextval as id_moeda FROM dual");
+        ResultSet result = stm.executeQuery();
+        int id = 0;
+        while (result.next()) {
+            id = result.getInt("id_moeda");
+        }
+        return id;
     }
 }
