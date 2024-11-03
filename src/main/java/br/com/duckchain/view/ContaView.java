@@ -3,11 +3,10 @@ import br.com.duckchain.dao.ContaDao;
 import br.com.duckchain.model.Conta;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ContaView {
-
-    private static int ultimoId = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -62,9 +61,7 @@ public class ContaView {
         double saldoTotal = scanner.nextDouble();
         scanner.nextLine();
 
-        int idConta = gerarId();
-
-        Conta novaConta = new Conta(idConta, idUsuario, saldoTotal, numeroConta);
+        Conta novaConta = new Conta(0, idUsuario, saldoTotal, numeroConta);
 
         System.out.println("\nDados da nova conta:");
         System.out.println("ID Usuário: " + idUsuario);
@@ -197,7 +194,4 @@ public class ContaView {
         }
     }
 
-    private static int gerarId() {
-        return ++ultimoId;
-    }
 }
