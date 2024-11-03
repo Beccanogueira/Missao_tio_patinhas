@@ -17,19 +17,19 @@ public class Main
                     System.out.println("Encerrando programa...");
                     break;
                 case 1:
-                    UsuarioView.main(args);
+                    UsuarioView.executar(scanner);
                     break;
                 case 2:
-                    ContaView.main(args);
+                    ContaView.executar(scanner);
                     break;
                 case 3:
-                    MoedaView.main(args);
+                    MoedaView.executar(scanner);
                     break;
                 case 4:
-                    TransacaoView.main(args);
+                    TransacaoView.executar(scanner);
                     break;
                 case 5:
-                    TransferenciaView.main(args);
+                    TransferenciaView.executar(scanner);
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente...");
