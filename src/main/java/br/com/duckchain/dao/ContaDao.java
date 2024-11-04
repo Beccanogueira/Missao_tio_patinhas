@@ -23,7 +23,7 @@ public class ContaDao {
         String sql = "INSERT INTO t_conta (id_conta, id_usuario, vl_saldototal, cd_conta) VALUES (?, ?, ?, ?)";
         PreparedStatement stm = conexao.prepareStatement(sql);
 
-        stm.setInt(1, conta.getIdConta());
+        stm.setInt(1, gerarId());
         stm.setInt(2, conta.getIdUsuario());
         stm.setDouble(3, conta.getSaldoTotal());
         stm.setString(4, conta.getNumeroConta());
@@ -80,5 +80,15 @@ public class ContaDao {
         double saldototal = result.getDouble("vl_saldototal");
 
         return new Conta(id, idUsuario, saldototal, numeroConta);
+    }
+
+    private int gerarId() throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT s_conta_id.nextval as id_conta FROM dual");
+        ResultSet result = stm.executeQuery();
+        int id = 0;
+        while (result.next()) {
+            id = result.getInt("id_conta");
+        }
+        return id;
     }
 }

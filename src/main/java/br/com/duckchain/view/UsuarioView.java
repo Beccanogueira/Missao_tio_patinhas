@@ -61,10 +61,9 @@ public class UsuarioView {
         System.out.print("Digite o CPF: ");
         String cpf = scanner.next();
 
-        int id = gerarId();
         LocalDateTime dataCriacao = LocalDateTime.now();
 
-        Usuario novoUsuario = new Usuario(id, nome, email, senha, cpf);
+        Usuario novoUsuario = new Usuario(0, nome, email, senha, cpf);
         novoUsuario.setDataCriacao(dataCriacao);
 
         System.out.println("\nResumo do cadastro:");

@@ -20,7 +20,7 @@ public class TransferenciaDao {
 
     public void cadastrar(Transferencia transferencia) throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("INSERT INTO t_transferencia (id_transferencia, id_conta_origem, id_conta_destino, vl_valor, id_usuario, dt_transferencia) VALUES (?, ?, ?, ?, ?, ?)");
-        stm.setInt(1, transferencia.getId());
+        stm.setInt(1, gerarId());
         stm.setInt(2, transferencia.getIdContaOrigem());
         stm.setDouble(3, transferencia.getIdContaDestino());
         stm.setDouble(4, transferencia.getValor());
@@ -42,5 +42,15 @@ public class TransferenciaDao {
 
     public void fecharConexao() throws SQLException {
         conexao.close();
+    }
+
+    private int gerarId() throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT s_transferencia_id.nextval as id_transferencia FROM dual");
+        ResultSet result = stm.executeQuery();
+        int id = 0;
+        while (result.next()) {
+            id = result.getInt("id_transferencia");
+        }
+        return id;
     }
 }
