@@ -1,6 +1,10 @@
 package br.com.duckchain.view;
+import br.com.duckchain.dao.ContaDao;
 import br.com.duckchain.dao.TransacaoDao;
+import br.com.duckchain.dao.UsuarioDao;
+import br.com.duckchain.model.Conta;
 import br.com.duckchain.model.Transacao;
+import br.com.duckchain.model.Usuario;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -18,8 +22,13 @@ public class TransacaoView {
 
     public  static void executar(Scanner scanner) {
         TransacaoDao dao;
+        ContaDao contaDao;
+        UsuarioDao usuarioDao;
         try{
             dao = new TransacaoDao();
+            contaDao = new ContaDao();
+            usuarioDao = new UsuarioDao();
+
             int escolha;
             do {
                 System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSAÇÃO\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
@@ -29,7 +38,7 @@ public class TransacaoView {
                         System.out.println("Saindo e retornando ao MENU GERAL...");
                         break;
                     case 1:
-                        cadastrar(scanner, dao);
+                        cadastrar(scanner, dao, contaDao, usuarioDao);
                         break;
                     default:
                         System.out.println("Opção inválida. Tente novamente...");
@@ -41,19 +50,45 @@ public class TransacaoView {
         }
     }
 
-    private static void cadastrar(Scanner scanner, TransacaoDao dao) {
+    private static void cadastrar(Scanner scanner, TransacaoDao dao, ContaDao contaDao, UsuarioDao usuarioDao) {
         try {
-            System.out.print("ID da Conta: ");
-            int idConta = scanner.nextInt();
-
             System.out.print("ID do Usuário: ");
             int idUsuario = scanner.nextInt();
 
-            System.out.print("Tipo de Transação (Ex: Compra, Venda, Transferência): ");
-            String tipoTransacao = scanner.next();
+            Usuario usuario = usuarioDao.pesquisar(idUsuario);
+
+            System.out.print("ID da Conta: ");
+            int idConta = scanner.nextInt();
+
+            Conta conta = contaDao.pesquisar(idConta);
+
+            if (conta.getIdUsuario() != usuario.getId()) {
+                throw new Exception("Essa conta não pertence a esse usuário!");
+            }
+
+            System.out.print("Tipo de Transação (1: Saque; 2: Depósito): ");
+            int tpTransacao = scanner.nextInt();
+            String tipoTransacao;
+
+            if (tpTransacao != 1 && tpTransacao != 2) {
+                throw new Exception("Tipo de Transação inválida!");
+            }
+
+            tipoTransacao = tpTransacao == 1 ? "Saque" : "Depósito";
 
             System.out.print("Valor da Transação: ");
             double valor = scanner.nextDouble();
+
+            // se é um saque maior que o saldo não permite
+            if (tpTransacao == 1 && valor>conta.getSaldoTotal()) {
+                throw new Exception("Saldo insuficiente para saque!");
+            }
+
+            if (tpTransacao == 1) {
+                conta.removeSaldo(valor);
+            } else {
+                conta.addSaldo(valor);
+            }
 
             System.out.print("Descrição da Transação: ");
             scanner.nextLine(); // Consumir a linha pendente
@@ -76,6 +111,9 @@ public class TransacaoView {
             Transacao transacao = new Transacao(0, idConta, dataHora, tipoTransacao, valor, descricao, idUsuario, idMoeda);
 
             dao.cadastrar(transacao);
+
+            contaDao.atualizar(conta);
+
             System.out.println("\nTransação cadastrada com sucesso!");
 
         } catch (Exception e) {
