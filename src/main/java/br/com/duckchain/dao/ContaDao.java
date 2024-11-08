@@ -41,8 +41,9 @@ public class ContaDao {
         return parseConta(result);
     }
 
-    public List<Conta> listar() throws SQLException {
-        PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta");
+    public List<Conta> listar(int idUsuario) throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta WHERE id_usuario = ?");
+        stm.setInt(1, idUsuario);
         ResultSet result = stm.executeQuery();
         List<Conta> lista = new ArrayList<>();
         while (result.next()) {
@@ -50,6 +51,7 @@ public class ContaDao {
         }
         return lista;
     }
+
 
     public void atualizar(Conta conta) throws SQLException {
         PreparedStatement stm = conexao.prepareStatement("UPDATE t_conta SET id_usuario = ?, vl_saldototal = ?, cd_conta = ? WHERE id_conta = ?");

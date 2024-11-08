@@ -4,6 +4,7 @@ import br.com.duckchain.model.Conta;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class ContaView {
@@ -20,7 +21,7 @@ public class ContaView {
             dao = new ContaDao();
             int escolha;
             do {
-                System.out.println("--------------------------------\nCONTA - MENU:\n 1 - CADASTRAR CONTA\n 2 - PESQUISAR CONTA\n 3 - ATUALIZAR CONTA\n 4 - REMOVER CONTA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
+                System.out.println("--------------------------------\nCONTA - MENU:\n 1 - CADASTRAR CONTA\n 2 - PESQUISAR CONTA\n 3 - ATUALIZAR CONTA\n 4 - REMOVER CONTA\n 5 - LISTAR\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
                 escolha = scanner.nextInt();
 
                 switch (escolha) {
@@ -38,6 +39,9 @@ public class ContaView {
                         break;
                     case 4:
                         remover(scanner, dao);
+                        break;
+                    case 5:
+                        listar(scanner, dao);
                         break;
                     default:
                         System.out.println("Opção inválida. Tente novamente...");
@@ -193,5 +197,32 @@ public class ContaView {
             }
         }
     }
+    private static void listar(Scanner scanner, ContaDao dao) {
+        System.out.print("Digite o ID do usuário: ");
+        int idUsuario = scanner.nextInt();
+
+        List<Conta> contas = null;
+        try {
+            contas = dao.listar(idUsuario);
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as contas: " + e.getMessage());
+            return;
+        }
+
+        if (contas.isEmpty()) {
+            System.out.println("Nenhuma conta encontrada para o usuário ID " + idUsuario);
+        } else {
+            for (Conta conta : contas) {
+                System.out.println("----------------------------");
+                System.out.println("ID: " + conta.getIdConta());
+                System.out.println("Número da Conta: " + conta.getNumeroConta());
+                System.out.println("Saldo Total: " + conta.getSaldoTotal());
+                System.out.println("ID do Usuário: " + conta.getIdUsuario());
+            }
+        }
+    }
+
+
 
 }
+

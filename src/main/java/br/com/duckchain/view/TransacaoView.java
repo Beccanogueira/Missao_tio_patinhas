@@ -22,7 +22,7 @@ public class TransacaoView {
             dao = new TransacaoDao();
             int escolha;
             do {
-                System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSAÇÃO\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
+                System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSAÇÃO\n 2 - LISTAR\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
                 escolha = scanner.nextInt();
                 switch (escolha){
                     case 0:
@@ -31,6 +31,10 @@ public class TransacaoView {
                     case 1:
                         cadastrar(scanner, dao);
                         break;
+                    case 2:
+                        listar(scanner, dao);
+                        break;
+
                     default:
                         System.out.println("Opção inválida. Tente novamente...");
                 }
@@ -82,6 +86,33 @@ public class TransacaoView {
             System.out.println("Erro ao cadastrar a transação: " + e.getMessage());
         }
     }
+
+    private static void listar(Scanner scanner, TransacaoDao dao) {
+        System.out.print("Digite o ID da conta para listar as transações: ");
+        int idConta = scanner.nextInt();
+
+        List<Transacao> transacoes = null;
+        try {
+            transacoes = dao.listar(idConta);
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as transações: " + e.getMessage());
+            return;
+        }
+
+        if (transacoes.isEmpty()) {
+            System.out.println("Nenhuma transação encontrada para a conta ID " + idConta);
+        } else {
+            for (Transacao transacao : transacoes) {
+                System.out.println("----------------------------");
+                System.out.println("ID: " + transacao.getIdTransacao());
+                System.out.println("Tipo: " + transacao.getTipoTransacao());
+                System.out.println("Valor: " + transacao.getValor());
+                System.out.println("Descrição: " + transacao.getDescricao());
+                System.out.println("Data: " + transacao.getDataHora());
+            }
+        }
+    }
+
 }
 
 

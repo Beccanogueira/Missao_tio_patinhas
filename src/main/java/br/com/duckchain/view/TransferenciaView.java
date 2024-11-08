@@ -22,7 +22,7 @@ public class TransferenciaView {
             dao = new TransferenciaDao();
             int escolha;
             do {
-                System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSFERENCIA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
+                System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSFERENCIA\n 2 - LISTAR\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
                 escolha = scanner.nextInt();
                 switch (escolha){
                     case 0:
@@ -30,6 +30,9 @@ public class TransferenciaView {
                         break;
                     case 1:
                         cadastrar(scanner, dao);
+                        break;
+                    case 2:
+                        listar(scanner, dao);
                         break;
                     default:
                         System.out.println("Opção inválida. Tente novamente...");
@@ -73,4 +76,30 @@ public class TransferenciaView {
             System.out.println("Erro ao cadastrar a transferência: " + e.getMessage());
         }
     }
+    private static void listar(Scanner scanner, TransferenciaDao dao) {
+        System.out.print("Digite o ID do usuário para listar as transferências: ");
+        int idUsuario = scanner.nextInt();
+
+        List<Transferencia> transferencias = null;
+        try {
+            transferencias = dao.listar(idUsuario);
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as transferências: " + e.getMessage());
+            return;
+        }
+
+        if (transferencias.isEmpty()) {
+            System.out.println("Nenhuma transferência encontrada para o usuário ID " + idUsuario);
+        } else {
+            for (Transferencia transferencia : transferencias) {
+                System.out.println("----------------------------");
+                System.out.println("ID: " + transferencia.getIdTransferencia());
+                System.out.println("Conta Origem: " + transferencia.getIdContaOrigem());
+                System.out.println("Conta Destino: " + transferencia.getIdContaDestino());
+                System.out.println("Valor: " + transferencia.getValor());
+                System.out.println("Data: " + transferencia.getDataTransferencia());
+            }
+        }
+    }
+
 }

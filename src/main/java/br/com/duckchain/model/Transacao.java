@@ -90,4 +90,8 @@ public class Transacao {
     public void setIdMoeda(int idMoeda) {
         this.idMoeda = idMoeda;
     }
+
+    public String getIdTransacao() {
+        return null;
+    }
 }

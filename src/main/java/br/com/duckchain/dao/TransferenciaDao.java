@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransferenciaDao {
 
@@ -53,4 +55,15 @@ public class TransferenciaDao {
         }
         return id;
     }
+    public List<Transferencia> listar(int idUsuario) throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_transferencia WHERE id_usuario = ?");
+        stm.setInt(1, idUsuario);
+        ResultSet result = stm.executeQuery();
+        List<Transferencia> lista = new ArrayList<>();
+        while (result.next()) {
+            lista.add(parseTransferencia(result));
+        }
+        return lista;
+    }
+
 }

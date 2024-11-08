@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransacaoDao {
 
@@ -45,4 +47,21 @@ public class TransacaoDao {
         }
         return id;
     }
+
+    public List<Transacao> listar(int idConta) throws SQLException {
+        PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_transacao WHERE id_conta = ?");
+        stm.setInt(1, idConta);
+        ResultSet result = stm.executeQuery();
+        List<Transacao> lista = new ArrayList<>();
+        while (result.next()) {
+            lista.add(parseTransacao(result));
+        }
+        return lista;
+    }
+
+    private Transacao parseTransacao(ResultSet result) {
+        return null;
+    }
+
+
 }

@@ -67,4 +67,8 @@ public class Transferencia {
     public void setDataTransferencia(LocalDateTime dataTransferencia) {
         this.dataTransferencia = dataTransferencia;
     }
+
+    public String getIdTransferencia() {
+        return null;
+    }
 }
