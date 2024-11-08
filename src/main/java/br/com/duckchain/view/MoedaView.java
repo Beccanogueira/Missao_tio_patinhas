@@ -19,7 +19,15 @@ public class MoedaView {
             int escolha;
             do{
                 System.out.println("--------------------------------\nMOEDA - MENU:\n 1 - CADASTRAR MOEDA\n 2 - PESQUISAR MOEDA\n 3 - LISTAR MOEDAS\n 4 - DELETAR MOEDA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
+
+                try {
+                    escolha = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada Inválida. Por favor, tente novamente e digite um número inteiro.")
+                    scanner.nextLine();
+                    continue;
+                }
+
                 switch (escolha){
                     case 0:
                         System.out.println("Saindo e retornando ao MENU GERAL...");

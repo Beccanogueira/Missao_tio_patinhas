@@ -24,7 +24,15 @@ public class UsuarioView {
             int escolha;
             do {
                 System.out.println("--------------------------------\nUSUARIO - MENU:\n 1 - CADASTRAR USUARIO\n 2 - PESQUISAR USUARIO\n 3 - ATUALIZAR USUARIO\n 4 - DELETAR USUARIO\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
+
+                try {
+                    escolha = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada Inválida. Por favor, tente novamente e digite um número inteiro.")
+                    scanner.nextLine();
+                    continue;
+                }
+
                 switch (escolha) {
                     case 1:
                         cadastrar(scanner, dao);

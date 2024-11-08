@@ -11,7 +11,15 @@ public class Main
         int escolha;
         do{
             System.out.println("--------------------------------\nMENU GERAL:\n 1 - USUÁRIOS\n 2 - CONTAS\n 3 - MOEDAS/CRIPTOATIVOS\n 4 - TRANSAÇÕES\n 5 - TRANSFERÊNCIAS\n 0 - ENCERRAR PROGRAMA\n--------------------------------\nDigite o número da função desejada:");
-            escolha = scanner.nextInt();
+
+            try {
+                escolha = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada Inválida. Por favor, tente novamente e digite um número inteiro.")
+                scanner.nextLine();
+                continue;
+            }
+
             switch (escolha){
                 case 0:
                     System.out.println("Encerrando programa...");

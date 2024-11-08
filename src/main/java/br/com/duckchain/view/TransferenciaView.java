@@ -23,7 +23,15 @@ public class TransferenciaView {
             int escolha;
             do {
                 System.out.println("--------------------------------\nTRANSFERENCIA - MENU:\n 1 - CADASTRAR TRANSFERENCIA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
+
+                try {
+                    escolha = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada Inválida. Por favor, tente novamente e digite um número inteiro.")
+                    scanner.nextLine();
+                    continue;
+                }
+
                 switch (escolha){
                     case 0:
                         System.out.println("Saindo e retornando ao MENU GERAL...");

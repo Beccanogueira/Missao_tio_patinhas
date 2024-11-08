@@ -41,7 +41,7 @@ public class ContaDao {
         return parseConta(result);
     }
 
-    public List<Conta> listar() throws SQLException {
+    public List<Conta> listar() throws SQLException { // inserir parametro com where para o usuario inserir seus dados
         PreparedStatement stm = conexao.prepareStatement("SELECT * FROM t_conta");
         ResultSet result = stm.executeQuery();
         List<Conta> lista = new ArrayList<>();

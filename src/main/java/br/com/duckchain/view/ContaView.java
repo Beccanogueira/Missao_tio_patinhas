@@ -21,7 +21,14 @@ public class ContaView {
             int escolha;
             do {
                 System.out.println("--------------------------------\nCONTA - MENU:\n 1 - CADASTRAR CONTA\n 2 - PESQUISAR CONTA\n 3 - ATUALIZAR CONTA\n 4 - REMOVER CONTA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
+
+                try {
+                    escolha = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada Inválida. Por favor, tente novamente e digite um número inteiro.")
+                    scanner.nextLine();
+                    continue;
+                }
 
                 switch (escolha) {
                     case 0:
