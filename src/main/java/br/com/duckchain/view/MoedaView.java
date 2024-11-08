@@ -1,60 +1,59 @@
 package br.com.duckchain.view;
 import br.com.duckchain.dao.MoedaDao;
+import br.com.duckchain.exception.EntidadeNaoEncontradaException;
 import br.com.duckchain.model.Moeda;
-import br.com.duckchain.exception.*;
-import java.sql.*;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
 
-public class MoedaView {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        executar(scanner);
-        scanner.close();
-    }
+public class MoedaView extends BaseView{
 
-    public static void executar(Scanner scanner) {
-        MoedaDao dao;
+    private MoedaDao dao;
+
+    public MoedaView(String title, Scanner scanner){
+        super(title, scanner);
         try{
-            dao = new MoedaDao();
-            int escolha;
-            do{
-                System.out.println("--------------------------------\nMOEDA - MENU:\n 1 - CADASTRAR MOEDA\n 2 - PESQUISAR MOEDA\n 3 - LISTAR MOEDAS\n 4 - DELETAR MOEDA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
-                switch (escolha){
-                    case 0:
-                        System.out.println("Saindo e retornando ao MENU GERAL...");
-                        break;
-                    case 1:
-                        cadastrar(scanner, dao);
-                        break;
-                    case 2:
-                        pesquisar(scanner, dao);
-                        break;
-                    case 3:
-                        listar(scanner, dao);
-                        break;
-                    case 4:
-                        remover(scanner, dao);
-                        break;
-                    default:
-                        System.out.println("Opção inválida. Tente novamente...");
-                }
-            }while (escolha!=0);
-            dao.fecharConexao();
+            this.dao = new MoedaDao();
         }catch (SQLException e){
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
         }
     }
 
-    private static void cadastrar(Scanner scanner, MoedaDao dao){
+    @Override
+    public void cadastrar() {
+        cadastrarMoeda(scanner, dao);
+    }
+
+    @Override
+    public void listar() {
+        listarMoeda(scanner, dao);
+    }
+
+    @Override
+    public void pesquisar() {
+        pesquisarMoeda(scanner, dao);
+    }
+
+    @Override
+    public void atualizar() {
+        atualizarMoeda(scanner, dao);
+    }
+
+    @Override
+    public void remover() {
+        removerMoeda(scanner, dao);
+    }
+
+    private void cadastrarMoeda(Scanner scanner, MoedaDao dao){
+        System.out.println("\n--------CADASTRAR MOEDA---------");
         System.out.println("Digite o nome da moeda/ativo:");
         String nome = scanner.next() + scanner.nextLine();
         System.out.println("Digite a cotação atual:");
-        double cotacaoAtual = scanner.nextDouble();
+        double cotacaoAtual = lerDecimal();
         System.out.println("Digite a variação em percentual das últimas 24 horas:");
-        double variacao24H = scanner.nextDouble();
+        double variacao24H = lerDecimal();
         System.out.println("Digite a variação em volume das últimas 24 horas:");
-        double volume24H = scanner.nextDouble();
+        double volume24H = lerDecimal();
         Moeda novaMoeda = new Moeda(0, nome, cotacaoAtual, variacao24H, volume24H);
         try{
             dao.cadastrar(novaMoeda);
@@ -63,10 +62,35 @@ public class MoedaView {
             System.err.println("Erro ao cadastrar: " + e.getMessage());
         }
     }
-    private static void pesquisar(Scanner scanner, MoedaDao dao) {
+
+    private void listarMoeda(Scanner scanner, MoedaDao dao){
+        List<Moeda> moedas = null;
+        try {
+            moedas = dao.listar();
+        } catch (Exception e) {
+            System.out.println("Erro ao listar as moedas: " + e.getMessage());
+            return;
+        }
+
+        if (moedas.isEmpty()) {
+            System.out.println("Nenhuma moeda encontrada.");
+        } else {
+            System.out.println("\n-------MOEDAS CADASTRADAS-------");
+            for (Moeda moeda : moedas) {
+                System.out.println("ID: " + moeda.getIdMoeda());
+                System.out.println("Nome: " + moeda.getNome());
+                System.out.println("Cotação Atual: " + moeda.getCotacaoAtual());
+                System.out.println("Variação 24H: " + moeda.getVariacao24H());
+                System.out.println("Volume 24H: " + moeda.getVolume24H());
+                System.out.println("--------------------------------");
+            }
+        }
+    }
+
+    private void pesquisarMoeda(Scanner scanner, MoedaDao dao){
         System.out.print("Digite o ID da moeda que deseja pesquisar: ");
-        int idMoeda = scanner.nextInt();
-        scanner.nextLine();
+        int idMoeda = lerInteiro();
+        //scanner.nextLine();
 
         Moeda moeda = null;
         try {
@@ -86,35 +110,15 @@ public class MoedaView {
             System.out.println("Variação 24H: " + moeda.getVariacao24H());
             System.out.println("Volume 24H: " + moeda.getVolume24H());
         }
+    }
+
+    private void atualizarMoeda(Scanner scanner, MoedaDao dao){
 
     }
 
-    private static void listar(Scanner scanner, MoedaDao dao) {
-        List<Moeda> moedas = null;
-        try {
-            moedas = dao.listar();
-        } catch (Exception e) {
-            System.out.println("Erro ao listar as moedas: " + e.getMessage());
-            return;
-        }
-
-        if (moedas.isEmpty()) {
-            System.out.println("Nenhuma moeda encontrada.");
-        } else {
-            for (Moeda moeda : moedas) {
-                System.out.println("----------------------------");
-                System.out.println("ID: " + moeda.getIdMoeda());
-                System.out.println("Nome: " + moeda.getNome());
-                System.out.println("Cotação Atual: " + moeda.getCotacaoAtual());
-                System.out.println("Variação 24H: " + moeda.getVariacao24H());
-                System.out.println("Volume 24H: " + moeda.getVolume24H());
-            }
-        }
-    }
-
-    private static void remover(Scanner scanner, MoedaDao dao) {
+    private void removerMoeda(Scanner scanner, MoedaDao dao){
         System.out.println("Digite o código da moeda que deseja remover:");
-        int idMoeda = scanner.nextInt();
+        int idMoeda = lerInteiro();
         try {
             dao.remover(idMoeda);
             System.out.println("Removido com sucesso!");
@@ -123,25 +127,3 @@ public class MoedaView {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

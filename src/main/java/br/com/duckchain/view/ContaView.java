@@ -1,65 +1,60 @@
 package br.com.duckchain.view;
 import br.com.duckchain.dao.ContaDao;
+import br.com.duckchain.dao.MoedaDao;
+import br.com.duckchain.exception.EntidadeNaoEncontradaException;
 import br.com.duckchain.model.Conta;
-
+import br.com.duckchain.model.Moeda;
 import java.sql.SQLException;
-import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
-public class ContaView {
+public class ContaView extends BaseView{
+    private ContaDao dao;
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        executar(scanner);
-        scanner.close();
-    }
-
-    public static void executar(Scanner scanner) {
-        ContaDao dao;
-        try {
-            dao = new ContaDao();
-            int escolha;
-            do {
-                System.out.println("--------------------------------\nCONTA - MENU:\n 1 - CADASTRAR CONTA\n 2 - PESQUISAR CONTA\n 3 - ATUALIZAR CONTA\n 4 - REMOVER CONTA\n 0 - SAIR \n--------------------------------\nDigite o número da função desejada:");
-                escolha = scanner.nextInt();
-
-                switch (escolha) {
-                    case 0:
-                        System.out.println("Saindo e retornando ao MENU GERAL...");
-                        break;
-                    case 1:
-                        cadastrar(scanner, dao);
-                        break;
-                    case 2:
-                        pesquisar(scanner, dao);
-                        break;
-                    case 3:
-                        atualizar(scanner, dao);
-                        break;
-                    case 4:
-                        remover(scanner, dao);
-                        break;
-                    default:
-                        System.out.println("Opção inválida. Tente novamente...");
-                }
-            } while (escolha != 0);
-            dao.fecharConexao();
-        } catch (SQLException e) {
+    public ContaView(String title, Scanner scanner){
+        super(title, scanner);
+        try{
+            this.dao = new ContaDao();
+        }catch (SQLException e){
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
         }
     }
 
-    private static void cadastrar(Scanner scanner, ContaDao dao) {
+    @Override
+    public void cadastrar() {
+        cadastrarConta(scanner, dao);
+    }
+
+    @Override
+    public void listar() {
+        listarConta(scanner, dao);
+    }
+
+    @Override
+    public void pesquisar() {
+        pesquisarConta(scanner, dao);
+    }
+
+    @Override
+    public void atualizar() {
+        atualizarConta(scanner, dao);
+    }
+
+    @Override
+    public void remover() {
+        removerConta(scanner, dao);
+    }
+
+    private void cadastrarConta(Scanner scanner, ContaDao dao){
+        System.out.println("\n--------CADASTRAR CONTA---------");
         System.out.print("Digite o ID do usuário: ");
-        int idUsuario = scanner.nextInt();
-        scanner.nextLine(); // Consumir a linha nova após o número
+        int idUsuario = lerInteiro();
 
         System.out.print("Digite o número da conta: ");
         String numeroConta = scanner.nextLine();
 
         System.out.print("Digite o saldo inicial: ");
-        double saldoTotal = scanner.nextDouble();
-        scanner.nextLine();
+        double saldoTotal = lerDecimal();
 
         Conta novaConta = new Conta(0, idUsuario, saldoTotal, numeroConta);
 
@@ -77,17 +72,22 @@ public class ContaView {
             } catch (SQLException e) {
                 System.out.println(e);
             }
+            System.out.println("--------------------------------");
             System.out.println("Conta cadastrada com sucesso!");
         } else {
+            System.out.println("--------------------------------");
             System.out.println("Cadastro de conta cancelado.");
         }
+    }
+
+    private void listarConta(Scanner scanner, ContaDao dao){
 
     }
 
-    private static void pesquisar(Scanner scanner, ContaDao dao) {
+    private void pesquisarConta(Scanner scanner, ContaDao dao){
         System.out.print("Digite o ID da conta que deseja pesquisar: ");
-        int idConta = scanner.nextInt();
-        scanner.nextLine();
+        int idConta = lerInteiro();
+        //scanner.nextLine();
 
         Conta conta = null;
         try {
@@ -106,10 +106,11 @@ public class ContaView {
             System.out.println("Número da Conta: " + conta.getNumeroConta());
         }
     }
-    private static void atualizar(Scanner scanner, ContaDao dao) {
+
+    private void atualizarConta(Scanner scanner, ContaDao dao){
         System.out.print("Digite o ID da conta que deseja atualizar: ");
-        int idConta = scanner.nextInt();
-        scanner.nextLine();
+        int idConta = lerInteiro();
+        //scanner.nextLine();
 
         Conta conta = null;
         try {
@@ -128,15 +129,15 @@ public class ContaView {
             System.out.println("Número da Conta: " + conta.getNumeroConta());
 
             System.out.print("\nDigite o novo ID do usuário (atual: " + conta.getIdUsuario() + "): ");
-            int idUsuario = scanner.nextInt();
-            scanner.nextLine();
+            int idUsuario = lerInteiro();
+            //scanner.nextLine();
 
             System.out.print("Digite o novo número da conta (atual: " + conta.getNumeroConta() + "): ");
             String numeroConta = scanner.nextLine();
 
             System.out.print("Digite o novo saldo total (atual: " + conta.getSaldoTotal() + "): ");
-            double saldoTotal = scanner.nextDouble();
-            scanner.nextLine();
+            double saldoTotal = lerDecimal();
+            //scanner.nextLine();
 
             System.out.println("\nConfirma a atualização da conta? (s/n): ");
             String confirmacao = scanner.nextLine();
@@ -148,21 +149,23 @@ public class ContaView {
 
                 try {
                     dao.atualizar(conta);
+                    System.out.println("--------------------------------");
                     System.out.println("Conta atualizada com sucesso!");
                 } catch (Exception e) {
+                    System.out.println("--------------------------------");
                     System.out.println("Erro ao atualizar a conta: " + e.getMessage());
                 }
             } else {
+                System.out.println("--------------------------------");
                 System.out.println("Atualização de conta cancelada.");
             }
         }
-
     }
 
-    private static void remover(Scanner scanner, ContaDao dao) {
+    private void removerConta(Scanner scanner, ContaDao dao){
         System.out.print("Digite o ID da conta que deseja remover: ");
-        int idConta = scanner.nextInt();
-        scanner.nextLine();
+        int idConta = lerInteiro();
+        //scanner.nextLine();
 
         boolean contaExiste = false;
         try {
@@ -193,5 +196,4 @@ public class ContaView {
             }
         }
     }
-
 }

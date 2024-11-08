@@ -34,7 +34,7 @@ public class Conta {
     }
 
     public void removeSaldo (double valorTransacao) {
-        if (valorTransacao <= 0 || getSaldoTotal() < saldoTotal ) {
+        if (valorTransacao <= 0 || getSaldoTotal() < valorTransacao) {
             throw new IllegalArgumentException("Valor de transação inválido");
         }
         double saldoAtual = getSaldoTotal() - valorTransacao;
